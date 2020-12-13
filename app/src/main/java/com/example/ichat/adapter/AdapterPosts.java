@@ -111,7 +111,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         setLikes(myHolder, pId);
 
         try {
-            Picasso.get().load(uDp).placeholder(R.drawable.img1).into(myHolder.uPictureIv);
+            Picasso.get().load(uDp).placeholder(R.drawable.a6).into(myHolder.uPictureIv);
         } catch (Exception e) {
 
         }
@@ -172,6 +172,8 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                 });
             }
         });
+
+
         myHolder.commentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,6 +223,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
 
     }
+
 
     private void addToHisNotifications(String hisUid, String pId, String notification) {
         //timestamp for time and notification id
@@ -452,6 +455,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         });
     }
 
+
     @Override
     public int getItemCount() {
         return postList.size();
@@ -486,5 +490,6 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             ll_like_post = itemView.findViewById(R.id.ll_like_post);
         }
     }
+
 
 }

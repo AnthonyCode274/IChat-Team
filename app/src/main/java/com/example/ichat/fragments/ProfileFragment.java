@@ -10,8 +10,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ichat.AddPostActivity;
 import com.example.ichat.HauNguyen.Login.LoginActivity;
@@ -68,6 +72,11 @@ import static com.google.firebase.storage.FirebaseStorage.getInstance;
 
 public class ProfileFragment extends Fragment {
 
+    //permissions constants
+    private static final int CAMERA_REQUEST_CODE = 100;
+    private static final int STORAGE_REQUEST_CODE = 200;
+    private static final int IMAGE_PICK_GALLERY_CODE = 300;
+    private static final int IMAGE_PICK_CAMERA_CODE = 400;
     //firebase
     FirebaseAuth firebaseAuth;
     FirebaseUser user;
@@ -77,21 +86,17 @@ public class ProfileFragment extends Fragment {
     StorageReference storageReference;
     //path where images of user profile and cover will be stored
     String storagePath = "Users_Profile_Cover_Imgs/";
-
     //views from xml
     ImageView avatarIv, coverIv;
     TextView nameTv, emailTv, phoneTv;
     FloatingActionButton fab;
+    SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView postsRecyclerView;
-
+    LinearLayout error_layout;
+    ProgressBar profile_progress;
+    Button btnRetry;
     //progress dialog
     ProgressDialog pd;
-
-    //permissions constants
-    private static final int CAMERA_REQUEST_CODE = 100;
-    private static final int STORAGE_REQUEST_CODE = 200;
-    private static final int IMAGE_PICK_GALLERY_CODE = 300;
-    private static final int IMAGE_PICK_CAMERA_CODE = 400;
     //arrays of permissions to be requested
     String cameraPermissions[];
     String storagePermissions[];
@@ -116,7 +121,9 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        innitView(view);
 
+        error_layout.setVisibility(View.GONE);
 
         //init firebase
         firebaseAuth = FirebaseAuth.getInstance();
@@ -129,14 +136,7 @@ public class ProfileFragment extends Fragment {
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-        //init views
-        avatarIv = view.findViewById(R.id.avatarIv);
-        coverIv = view.findViewById(R.id.coverIv);
-        nameTv = view.findViewById(R.id.nameTv);
-        emailTv = view.findViewById(R.id.emailTv);
-        phoneTv = view.findViewById(R.id.phoneTv);
-        fab = view.findViewById(R.id.fab);
-        postsRecyclerView = view.findViewById(R.id.recyclerview_posts);
+
 
         //init progress dialog
         pd = new ProgressDialog(getActivity());
@@ -169,7 +169,7 @@ public class ProfileFragment extends Fragment {
                         Picasso.get().load(image).into(avatarIv);
                     } catch (Exception e) {
                         //if there is any exception while getting image then set default
-                        Picasso.get().load(R.drawable.ic_default_img_white).into(avatarIv);
+                        Picasso.get().load(R.drawable.a8).into(avatarIv);
                     }
 
                     try {
@@ -201,12 +201,34 @@ public class ProfileFragment extends Fragment {
         checkUserStatus();
         loadMyPosts();
 
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.white);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadMyPosts();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 600);
+
+            }
+
+        });
+
 
         return view;
     }
 
+
+
     private void loadMyPosts() {
         //linear layout for recyclerview
+        profile_progress.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //show newest post first, for this load from last
         layoutManager.setStackFromEnd(true);
@@ -216,6 +238,15 @@ public class ProfileFragment extends Fragment {
 
         //init posts list
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+        if (ref == null){
+            error_layout.setVisibility(View.VISIBLE);
+            btnRetry.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //loadMyPosts();
+                }
+            });
+        }
         //qurey to load posts
         /*whenever user publishes a post the uid of this user is also saved as info of post
          * so we're retrieving posts having uid equals to uid of current user*/
@@ -227,14 +258,17 @@ public class ProfileFragment extends Fragment {
                 postList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Post myPosts = ds.getValue(Post.class);
-
                     //add to list
                     postList.add(myPosts);
 
                     //adapter
                     adapterPosts = new AdapterPosts(getActivity(), postList);
                     //set this adapter to recyclerview
-                    postsRecyclerView.setAdapter(adapterPosts);
+                    if (postList != null){
+                        postsRecyclerView.setAdapter(adapterPosts);
+                        profile_progress.setVisibility(View.INVISIBLE);
+                    }
+
                 }
             }
 
@@ -617,7 +651,7 @@ public class ProfileFragment extends Fragment {
                                 }
                             });
                 }
-                    //if user edit his name, also change it from hist posts
+                //if user edit his name, also change it from hist posts
             }
         });
         //add button in dialog to cancel
@@ -970,5 +1004,20 @@ public class ProfileFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void innitView(View view) {
+        //init views
+        avatarIv = view.findViewById(R.id.avatarIv);
+        coverIv = view.findViewById(R.id.coverIv);
+        nameTv = view.findViewById(R.id.nameTv);
+        emailTv = view.findViewById(R.id.emailTv);
+        phoneTv = view.findViewById(R.id.phoneTv);
+        fab = view.findViewById(R.id.fab);
+        postsRecyclerView = view.findViewById(R.id.recyclerview_posts);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_profile);
+        profile_progress = view.findViewById(R.id.profile_progress);
+        error_layout = view.findViewById(R.id.error_layout_profile);
+        btnRetry = view.findViewById(R.id.error_btn_retry_profile);
     }
 }

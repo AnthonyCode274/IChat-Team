@@ -576,9 +576,9 @@ public class PostDetailActivity extends AppCompatActivity {
                     //set data
                     try {
                         //if image is received then set
-                        Picasso.get().load(myDp).placeholder(R.drawable.ic_default_img).into(cAvatarIv);
+                        Picasso.get().load(myDp).placeholder(R.drawable.a9).into(cAvatarIv);
                     } catch (Exception e) {
-                        Picasso.get().load(R.drawable.ic_default_img).into(cAvatarIv);
+                        Picasso.get().load(R.drawable.a9).into(cAvatarIv);
                     }
                 }
             }
@@ -644,9 +644,9 @@ public class PostDetailActivity extends AppCompatActivity {
 
                     //set user image in comment part
                     try {
-                        Picasso.get().load(hisDp).placeholder(R.drawable.ic_default_img).into(uPictureIv);
+                        Picasso.get().load(hisDp).placeholder(R.drawable.a10).into(uPictureIv);
                     } catch (Exception e) {
-                        Picasso.get().load(R.drawable.ic_default_img).into(uPictureIv);
+                        Picasso.get().load(R.drawable.a10).into(uPictureIv);
                     }
 
 

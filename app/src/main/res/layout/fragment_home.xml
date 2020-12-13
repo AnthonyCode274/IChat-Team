@@ -17,140 +17,35 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/rlt_yourThink"
+        app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/include_post"/>
+
+    </RelativeLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/home_SwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<!--        <include layout="@layout/include_post_2" />-->
 
-            <include layout="@layout/include_post"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    
+                    android:id="@+id/postsRecyclerview"
+                    android:layout_below="@+id/cardPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/item_post"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/postsRecyclerview"
-                android:layout_below="@+id/cardPost"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/item_post"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </RelativeLayout>
-
-
-
-    </ScrollView>
-
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/rel_home"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="4dp"-->
-<!--        android:background="@android:color/white"-->
-<!--        android:orientation="vertical"-->
-<!--        android:padding="16dp">-->
-
-<!--        <RelativeLayout-->
-<!--            android:id="@+id/rvPost"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                android:id="@+id/ivAvatar"-->
-<!--                android:layout_width="35dp"-->
-<!--                android:layout_height="35dp"-->
-<!--                android:src="@drawable/img"-->
-<!--                android:layout_alignParentLeft="true"-->
-<!--                android:layout_alignParentTop="true" />-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/tvContent"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginLeft="16dp"-->
-<!--                android:layout_marginTop="7dp"-->
-<!--                android:layout_toRightOf="@id/ivAvatar"-->
-<!--                android:fontFamily="@font/ari"-->
-<!--                android:hint="Hôm nay bạn thế nào?"-->
-<!--                android:text=""-->
-<!--                android:textColor="#333"-->
-<!--                android:textSize="16dp"-->
-<!--                android:textStyle="italic" />-->
-
-<!--        </RelativeLayout>-->
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/line_post"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_below="@+id/rvPost"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            android:gravity="center">-->
-
-<!--            <LinearLayout-->
-<!--                android:id="@+id/clickPhoto"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content">-->
-
-<!--                <ImageView-->
-<!--                    android:layout_width="28dp"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:src="@drawable/ic_camera4" />-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center_vertical"-->
-<!--                    android:fontFamily="@font/ari"-->
-<!--                    android:lineSpacingExtra="2.6sp"-->
-<!--                    android:text="Photo"-->
-<!--                    android:textColor="@color/gray"-->
-<!--                    android:textSize="13.4sp" />-->
-<!--            </LinearLayout>-->
-
-<!--            <ImageView-->
-<!--                android:layout_width="28dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginLeft="50dp"-->
-<!--                android:src="@drawable/ic_video1" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:layout_marginRight="50dp"-->
-<!--                android:fontFamily="@font/ari"-->
-<!--                android:lineSpacingExtra="2.6sp"-->
-<!--                android:text="Video"-->
-<!--                android:textColor="@color/gray"-->
-<!--                android:textSize="13.4sp" />-->
-
-<!--            <ImageView-->
-<!--                android:layout_width="28dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:src="@drawable/ic_location2" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center_vertical"-->
-<!--                android:fontFamily="@font/ari"-->
-<!--                android:lineSpacingExtra="2.6sp"-->
-<!--                android:text="Location"-->
-<!--                android:textColor="@color/gray"-->
-<!--                android:textSize="13.4sp" />-->
-
-<!--        </LinearLayout>-->
-
-
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/postsRecyclerview"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_below="@+id/line_post" />-->
-<!--    </RelativeLayout>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

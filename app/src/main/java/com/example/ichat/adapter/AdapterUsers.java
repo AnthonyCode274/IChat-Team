@@ -76,7 +76,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
         myHolder.mEmailTv.setText(userEmail);
         try {
             Picasso.get().load(userImage)
-                    .placeholder(R.drawable.ic_default_img)
+                    .placeholder(R.drawable.a7)
                     .into(myHolder.mAvatarIv);
         } catch (Exception e) {
 
@@ -133,7 +133,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
     //view holder class
     class MyHolder extends RecyclerView.ViewHolder {
 
-        TextView     mNameTv, mEmailTv;
+        TextView mNameTv, mEmailTv;
         CircleImageView imgOn, imgOff, mAvatarIv;
 
         public MyHolder(@NonNull View itemView) {

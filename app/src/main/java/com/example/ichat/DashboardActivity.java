@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
@@ -33,7 +34,6 @@ public class DashboardActivity extends AppCompatActivity {
     //firebase auth
     FirebaseAuth firebaseAuth;
 
-    ActionBar actionBar;
 
     String mUID;
 
@@ -49,8 +49,6 @@ public class DashboardActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        }
         //Actionbar and its title
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("Profile");
 
         //init
         firebaseAuth = FirebaseAuth.getInstance();
@@ -60,7 +58,6 @@ public class DashboardActivity extends AppCompatActivity {
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
 
         //home fragment transaction (default, on star)
-        actionBar.setTitle("Home");//change actionbar title
         HomeFragment fragment1 = new HomeFragment();
         FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
         ft1.replace(R.id.content, fragment1, "");
@@ -69,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
         checkUserStatus();
 
     }
+
 
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -97,13 +95,11 @@ public class DashboardActivity extends AppCompatActivity {
                     switch (menuItem.getItemId()) {
                         case R.id.nav_home:
                             //home fragment transaction
-                            actionBar.setTitle("Home");//change actionbar title
                             HomeFragment fragment1 = new HomeFragment();
                             loadFragment(fragment1);
                             return true;
                         case R.id.nav_profile:
                             //profile fragment transaction
-                            actionBar.setTitle("Profile");//change actionbar title
                             ProfileFragment fragment2 = new ProfileFragment();
                             FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                             ft2.replace(R.id.content, fragment2, "");
@@ -111,7 +107,6 @@ public class DashboardActivity extends AppCompatActivity {
                             return true;
                         case R.id.nav_users:
                             //users fragment transaction
-                            actionBar.setTitle("Users");//change actionbar title
                             UsersFragment fragment3 = new UsersFragment();
                             FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
                             ft3.replace(R.id.content, fragment3, "");
@@ -119,7 +114,6 @@ public class DashboardActivity extends AppCompatActivity {
                             return true;
                         case R.id.nav_chat:
                             //users fragment transaction
-                            actionBar.setTitle("Chats");//change actionbar title
                             ChatListFragment fragment4 = new ChatListFragment();
                             FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
                             ft4.replace(R.id.content, fragment4, "");
@@ -149,8 +143,6 @@ public class DashboardActivity extends AppCompatActivity {
                 if (id == 0){
                     //notifications clicked
 
-                    //Notifications fragment transaction
-                    actionBar.setTitle("Notifications");//change actionbar title
                     NotificationsFragment fragment5 = new NotificationsFragment();
                     FragmentTransaction ft5 = getSupportFragmentManager().beginTransaction();
                     ft5.replace(R.id.content, fragment5, "");
@@ -160,7 +152,6 @@ public class DashboardActivity extends AppCompatActivity {
                     //group chats clicked
 
                     //Notifications fragment transaction
-                    actionBar.setTitle("Group Chats");//change actionbar title
                     GroupChatsFragment fragment6 = new GroupChatsFragment();
                     FragmentTransaction ft6 = getSupportFragmentManager().beginTransaction();
                     ft6.replace(R.id.content, fragment6, "");

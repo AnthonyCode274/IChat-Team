@@ -188,6 +188,7 @@ public class LoginActivity extends AppCompatActivity {
             hashMap.put("name", fullName); //will add later (e.g. edit profile)
             hashMap.put("gender", gender); //will add later (e.g. edit profile)
             hashMap.put("birthday", birthday); //will add later (e.g. edit profile)
+            hashMap.put("username", username); //will add later (e.g. edit profile)
             hashMap.put("onlineStatus", "online"); //will add later (e.g. edit profile)
             hashMap.put("typingTo", "noOne"); //will add later (e.g. edit profile)
             hashMap.put("phone", ""); //will add later (e.g. edit profile)

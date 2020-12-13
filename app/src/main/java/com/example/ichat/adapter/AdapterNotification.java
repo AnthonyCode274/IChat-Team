@@ -1,9 +1,11 @@
 package com.example.ichat.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ichat.PostDetailActivity;
@@ -31,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Random;
 
 public class AdapterNotification extends RecyclerView.Adapter<AdapterNotification.HolderNotification> {
 
@@ -85,6 +90,7 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
                             String name = "" + ds.child("name").getValue();
                             String image = "" + ds.child("image").getValue();
                             String email = "" + ds.child("email").getValue();
+                            String username = "" + ds.child("username").getValue();
 
                             //add to model
                             model.setsName(name);
@@ -92,12 +98,28 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
                             model.setsImage(image);
 
                             //set to views
-                            holder.nameTv.setText(name);
+                            holder.nameTv.setText(username);
 
                             try {
-                                Picasso.get().load(image).placeholder(R.drawable.ic_default_img).into(holder.avatarIv);
+
+                                if (image != null) {
+                                    Picasso.get().load(image).placeholder(R.drawable.a7).into(holder.avatarIv);
+                                }
                             } catch (Exception e) {
-                                holder.avatarIv.setImageResource(R.drawable.ic_default_img);
+
+                                if (position % 3 == 0) {
+                                    holder.avatarIv.setImageResource(R.drawable.a1);
+                                } else if (position % 3 == 1) {
+                                    holder.avatarIv.setImageResource(R.drawable.a2);
+                                } else if (position % 3 == 2){
+                                    holder.avatarIv.setImageResource(R.drawable.a3);
+                                }else if (position % 2 == 0){
+                                    holder.avatarIv.setImageResource(R.drawable.a4);
+                                }
+                                else if (position % 2 == 1){
+                                    holder.avatarIv.setImageResource(R.drawable.a5);
+                                }
+                                holder.avatarIv.setImageResource(R.drawable.a6);
                             }
                         }
                     }

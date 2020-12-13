@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IChat">
-        <activity android:name=".GroupEditActivity"></activity>
+        <activity android:name=".fragments.EditProfile.EditProfileActivity"></activity>
+        <activity android:name=".GroupEditActivity" />
         <activity android:name=".GroupInfoActivity" />
         <activity android:name=".GroupParticipantAddActivity" />
         <activity
@@ -47,9 +48,9 @@
         <activity
             android:name=".ChatActivity"
             android:theme="@style/AppThemeNo" />
-        <activity android:name=".DashboardActivity">
-
-        </activity>
+        <activity
+            android:name=".DashboardActivity"
+            android:theme="@style/ThemeHome"></activity>
 
         <service
             android:name=".notifications.FirebaseMessaging"
@@ -76,23 +77,20 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
-        </provider>
-
-        <!--   Start HauNGuyen    -->
-        <activity android:name=".HauNguyen.ContentHome"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".HauNguyen.SignUp.Content_FrameLayout_Register_Activity"
+        </provider> <!-- Start HauNGuyen -->
+        <activity
+            android:name=".HauNguyen.ContentHome"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".HauNguyen.SignUp.Content_FrameLayout_Register_Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-
-        </activity>
-        <activity android:name=".HauNguyen.Login.LoginActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".HauNguyen.Login.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-
-        </activity>
-
-        <activity android:name=".HauNguyen.BeginNew.SplashScreenActivity"
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".HauNguyen.BeginNew.SplashScreenActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -101,14 +99,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HauNguyen.BeginNew.OnBroading"
+        <activity
+            android:name=".HauNguyen.BeginNew.OnBroading"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <activity android:name=".HauNguyen.ForgotPassword.Content_ForgotPassWord_Activity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".HauNguyen.ForgotPassword.Content_ForgotPassWord_Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"/>
-        <!--   End HauNGuyen     -->
-
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

@@ -71,7 +71,7 @@ public class AdapterComments extends RecyclerView.Adapter<AdapterComments.MyHold
         myHolder.timeTv.setText(pTime);
         //set user dp
         try {
-            Picasso.get().load(image).placeholder(R.drawable.ic_default_img).into(myHolder.avatarIv);
+            Picasso.get().load(image).placeholder(R.drawable.a4).into(myHolder.avatarIv);
         }
         catch (Exception e){}
 

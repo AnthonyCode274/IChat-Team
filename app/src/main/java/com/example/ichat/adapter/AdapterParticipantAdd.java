@@ -61,10 +61,10 @@ public class AdapterParticipantAdd extends RecyclerView.Adapter<AdapterParticipa
         holder.nameTv.setText(name);
         holder.emailTv.setText(email);
         try {
-            Picasso.get().load(image).placeholder(R.drawable.ic_default_img).into(holder.avatarIv);
+            Picasso.get().load(image).placeholder(R.drawable.a5).into(holder.avatarIv);
         }
         catch (Exception e){
-            holder.avatarIv.setImageResource(R.drawable.ic_default_img);
+            holder.avatarIv.setImageResource(R.drawable.a5);
         }
 
         checkIfAlreadyExists(user, holder);

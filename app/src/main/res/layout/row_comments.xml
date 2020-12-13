@@ -17,7 +17,7 @@
             android:layout_height="40dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
-            android:src="@drawable/ic_default_img"/>
+            android:src="@drawable/a12"/>
 
         <TextView
             android:id="@+id/nameTv"

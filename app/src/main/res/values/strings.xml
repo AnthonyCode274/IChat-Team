@@ -55,4 +55,7 @@
     <string name="error_invalid_password">Please enter a minimum password of 6 characters</string>
     <string name="authentication_email">Verification check</string>
 
+    //Fragment home
+    <string name="error_msg">Sorry! Could not fetch data right now!.</string>
+    <string name="tap_reload">Tap to reload</string>
 </resources>

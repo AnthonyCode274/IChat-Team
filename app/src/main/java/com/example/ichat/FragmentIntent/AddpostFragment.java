@@ -86,7 +86,7 @@ public class AddpostFragment extends Fragment {
     ImageView imageIv, ivImage, ivEmotion;
     TextView uploadBtn;
     LinearLayout backInPost;
-    String name, email, uid, dp;
+    String name, email, uid, dp, username;
     String editDescription, editImage;
     //image picked will be samed in this uri
     Uri image_rui = null;
@@ -120,7 +120,7 @@ public class AddpostFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), DashboardActivity.class);
                 startActivity(i);
-
+                getActivity().finish();
             }
         });
         String action = intent.getAction();
@@ -146,7 +146,7 @@ public class AddpostFragment extends Fragment {
 
         }
 
-        tvUsername.setText(email);
+
 
         userDbRef = FirebaseDatabase.getInstance().getReference("Users");
         Query query = userDbRef.orderByChild("email").equalTo(email);
@@ -157,6 +157,8 @@ public class AddpostFragment extends Fragment {
                     name = "" + ds.child("name").getValue();
                     email = "" + ds.child("email").getValue();
                     dp = "" + ds.child("image").getValue();
+                    username = "" + ds.child("username").getValue();
+                    tvUsername.setText(username);
                 }
             }
 
@@ -188,6 +190,7 @@ public class AddpostFragment extends Fragment {
                     beginUpdate(description, editPostId);
                 } else {
                     uploadData(description);
+                    getActivity().finish();
                 }
 
             }

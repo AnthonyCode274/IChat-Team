@@ -3,28 +3,33 @@ package com.example.ichat.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.example.ichat.AddPostActivity;
+import com.example.ichat.DashboardActivity;
 import com.example.ichat.FragmentIntent.AddpostFragment;
 import com.example.ichat.HauNguyen.Login.LoginActivity;
 import com.example.ichat.R;
@@ -43,15 +48,22 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.content.ContentValues.TAG;
-
 public class HomeFragment extends Fragment {
-    LinearLayout clickPhoto;
+    public static final String TAG = "HomeFragment";
+    private static final int PAGE_START = 1;
+    // limiting to 5 for this tutorial, since total pages in actual API is very large. Feel free to modify.
+    private static final int TOTAL_PAGES = 5;
+    TextView clickPhoto;
     CircleImageView ivAvatar;
+    RelativeLayout rlBell;
+    SwipeRefreshLayout swipeRefreshLayout;
+    LinearLayoutManager linearLayoutManager;
+    ProgressBar progressBar;
+    Button btnRetry;
+    TextView txtError;
     //firebase auth
     FirebaseAuth firebaseAuth;
     List<User> users;
@@ -61,6 +73,7 @@ public class HomeFragment extends Fragment {
     int position;
     String hisDp;
 
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -69,22 +82,24 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_home_2, container, false);
+        innitView(view);
         //init
         firebaseAuth = FirebaseAuth.getInstance();
 //        getImage();
         //recycler view and its properties
-        ivAvatar = view.findViewById(R.id.ivAvatar);
-        recyclerView = view.findViewById(R.id.postsRecyclerview);
-        clickPhoto = (LinearLayout) view.findViewById(R.id.clickPhoto);
-        clickPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startFragment();
-            }
-        });
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+//        clickPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startFragment();
+//            }
+//        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         //show newest post first, for this load from last
         layoutManager.setStackFromEnd(true);
@@ -94,7 +109,46 @@ public class HomeFragment extends Fragment {
         //init post list
         postList = new ArrayList<>();
 
+
+        rlBell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Notifications fragment transaction
+                NotificationsFragment fragment5 = new NotificationsFragment();
+                FragmentTransaction ft5 = getActivity().getSupportFragmentManager().beginTransaction();
+                ft5.replace(R.id.content, fragment5, "");
+                ft5.commit();
+            }
+        });
+
+        swipeRefreshLayout.setRefreshing(false);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.white);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadPosts();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 600);
+
+            }
+
+        });
+
         loadPosts();
+
+        btnRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadPosts();
+            }
+        });
+
 
         return view;
     }
@@ -111,6 +165,7 @@ public class HomeFragment extends Fragment {
 
     private void loadPosts() {
         //path of all posts
+        progressBar.setVisibility(View.VISIBLE);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
         //get all data from this ref
         ref.addValueEventListener(new ValueEventListener() {
@@ -123,7 +178,9 @@ public class HomeFragment extends Fragment {
                     try {
                         Picasso.get().load(hisDp).placeholder(R.drawable.photo).into(ivAvatar);
                     } catch (Exception e) {
-                        Picasso.get().load(R.drawable.photo).into(ivAvatar);
+                        //Picasso.get().load(R.drawable.photo).into(ivAvatar);
+                        Log.e(TAG, "onDataChange: " + e.getMessage());
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
 
                     Post post = ds.getValue(Post.class);
@@ -133,7 +190,12 @@ public class HomeFragment extends Fragment {
                     //adapter
                     adapterPosts = new AdapterPosts(getActivity(), postList);
                     //set adapter to recyclerview
-                    recyclerView.setAdapter(adapterPosts);
+
+                    if (postList != null){
+                        recyclerView.setAdapter(adapterPosts);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+
                 }
             }
 
@@ -277,6 +339,17 @@ public class HomeFragment extends Fragment {
 //        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_inpost, addpostFragment, TAG).addToBackStack(null).commit();
         AddpostFragment addpostFragment = new AddpostFragment();
         getFragmentManager().beginTransaction().replace(R.id.content, addpostFragment).commit();
+    }
+
+    private void innitView(View view) {
+        ivAvatar = view.findViewById(R.id.ivAvatar);
+        rlBell = view.findViewById(R.id.rlBell);
+        recyclerView = view.findViewById(R.id.postsRecyclerview);
+        swipeRefreshLayout = view.findViewById(R.id.home_SwipeRefreshLayout);
+        clickPhoto = (TextView) view.findViewById(R.id.tvContent);
+        progressBar = view.findViewById(R.id.main_progress);
+        btnRetry = view.findViewById(R.id.error_btn_retry);
+        txtError = view.findViewById(R.id.error_txt_cause);
     }
 
 }

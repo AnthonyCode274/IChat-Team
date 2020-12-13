@@ -21,7 +21,6 @@
             android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/ivAvatar"
                 android:src="@drawable/photo"
                 android:layout_width="35dp"
@@ -31,17 +30,16 @@
 
             <TextView
                 android:id="@+id/tvContent"
-                android:layout_width="wrap_content"
+                android:padding="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:padding="4dp"
                 android:fontFamily="@font/ari"
                 android:hint="How are you today?"
                 android:textColor="#333"
                 android:textSize="14dp"
                 android:textStyle="italic"
-                android:layout_toRightOf="@id/ivAvatar"
-                android:layout_marginLeft="16dp" />
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@id/ivAvatar" />
 
         </RelativeLayout>
 

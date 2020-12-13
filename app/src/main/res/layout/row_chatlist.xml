@@ -27,7 +27,7 @@
                 android:layout_height="45dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/img1"/>
+                android:background="@drawable/a11"/>
 
 
             <de.hdodenhof.circleimageview.CircleImageView
