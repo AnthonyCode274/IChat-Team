@@ -2,6 +2,7 @@ package com.example.ichat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +17,11 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ichat.HauNguyen.Login.LoginActivity;
 import com.example.ichat.adapter.AdapterPosts;
+import com.example.ichat.adapter.Adapter_MixPost;
 import com.example.ichat.models.Post;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +44,7 @@ public class ThereProfileActivity extends AppCompatActivity {
     ImageView avatarIv, coverIv;
     TextView nameTv, emailTv, phoneTv;
     RecyclerView postsRecyclerView;
+    SwipeRefreshLayout swipe_there_profile;
 
     List<Post> postList;
     AdapterPosts adapterPosts;
@@ -63,6 +67,7 @@ public class ThereProfileActivity extends AppCompatActivity {
         emailTv = findViewById(R.id.emailTv);
         phoneTv = findViewById(R.id.phoneTv);
         postsRecyclerView = findViewById(R.id.recyclerview_posts);
+        swipe_there_profile = findViewById(R.id.swipe_there_profile);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -118,6 +123,25 @@ public class ThereProfileActivity extends AppCompatActivity {
 
         checkUserStatus();
         loadHistPosts();
+
+        swipe_there_profile.setRefreshing(false);
+        swipe_there_profile.setColorSchemeResources(R.color.colorPrimary);
+        swipe_there_profile.setProgressBackgroundColorSchemeResource(R.color.white);
+
+        swipe_there_profile.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadHistPosts();
+                        swipe_there_profile.setRefreshing(false);
+                    }
+                }, 600);
+
+            }
+
+        });
 
     }
 

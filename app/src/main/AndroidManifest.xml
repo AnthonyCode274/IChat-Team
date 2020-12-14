@@ -13,7 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IChat">
-        <activity android:name=".fragments.EditProfile.EditProfileActivity"></activity>
+        <activity android:name=".fragments.Fragment_Setting"></activity>
+        <activity
+            android:name=".fragments.Fragment_EditProfile"
+            android:theme="@style/AppTheme">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
         <activity android:name=".GroupEditActivity" />
         <activity android:name=".GroupInfoActivity" />
         <activity android:name=".GroupParticipantAddActivity" />
@@ -50,7 +61,7 @@
             android:theme="@style/AppThemeNo" />
         <activity
             android:name=".DashboardActivity"
-            android:theme="@style/ThemeHome"></activity>
+            android:theme="@style/ThemeHome" />
 
         <service
             android:name=".notifications.FirebaseMessaging"
@@ -84,11 +95,11 @@
         <activity
             android:name=".HauNguyen.SignUp.Content_FrameLayout_Register_Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".HauNguyen.Login.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".HauNguyen.BeginNew.SplashScreenActivity"
             android:screenOrientation="portrait"

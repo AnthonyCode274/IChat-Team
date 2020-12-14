@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -58,9 +59,10 @@ public class HomeFragment extends Fragment {
     private static final int TOTAL_PAGES = 5;
     TextView clickPhoto;
     CircleImageView ivAvatar;
-    RelativeLayout rlBell;
+    RelativeLayout rlBell, rlt_yourThink;
     SwipeRefreshLayout swipeRefreshLayout;
     LinearLayoutManager linearLayoutManager;
+    LinearLayout rlt_error_loadingHome, error_layout;
     ProgressBar progressBar;
     Button btnRetry;
     TextView txtError;
@@ -134,7 +136,7 @@ public class HomeFragment extends Fragment {
                         loadPosts();
                         swipeRefreshLayout.setRefreshing(false);
                     }
-                }, 600);
+                }, 500);
 
             }
 
@@ -186,6 +188,7 @@ public class HomeFragment extends Fragment {
                     Post post = ds.getValue(Post.class);
 
                     postList.add(post);
+                    //postList = null;
 
                     //adapter
                     adapterPosts = new AdapterPosts(getActivity(), postList);
@@ -194,6 +197,11 @@ public class HomeFragment extends Fragment {
                     if (postList != null){
                         recyclerView.setAdapter(adapterPosts);
                         progressBar.setVisibility(View.INVISIBLE);
+                    }else {
+                        rlt_yourThink.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.GONE);
+                        rlt_error_loadingHome.setVisibility(View.VISIBLE);
+                        error_layout.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -350,6 +358,9 @@ public class HomeFragment extends Fragment {
         progressBar = view.findViewById(R.id.main_progress);
         btnRetry = view.findViewById(R.id.error_btn_retry);
         txtError = view.findViewById(R.id.error_txt_cause);
+        rlt_yourThink = view.findViewById(R.id.rlt_yourThink);
+        error_layout = view.findViewById(R.id.error_layout);
+        rlt_error_loadingHome = view.findViewById(R.id.rlt_error_loadingHome);
     }
 
 }

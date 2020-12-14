@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/swipe_there_profile"
     android:background="#F1EDED">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,10 +15,12 @@
         <!--Cover  Photo-->
         <ImageView
             android:id="@+id/coverIv"
+            android:src="@drawable/binz1"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="@color/colorPrimaryDark"
-            android:scaleType="fitXY">
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true">
 
         </ImageView>
 
@@ -44,6 +49,7 @@
 
                 <TextView
                     android:id="@+id/nameTv"
+                    android:text="Full name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -54,6 +60,7 @@
 
                 <TextView
                     android:id="@+id/emailTv"
+                    android:text="Email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -62,6 +69,7 @@
 
                 <TextView
                     android:id="@+id/phoneTv"
+                    android:text="phone number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -77,7 +85,10 @@
             android:id="@+id/recyclerview_posts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:listitem="@layout/item_post"
             android:layout_below="@id/linearLayout" />
 
+
     </RelativeLayout>
-</ScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

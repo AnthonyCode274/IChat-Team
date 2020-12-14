@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +89,7 @@ public class ProfileFragment extends Fragment {
     String storagePath = "Users_Profile_Cover_Imgs/";
     //views from xml
     ImageView avatarIv, coverIv;
+    RelativeLayout iv_moreSetting_profile;
     TextView nameTv, emailTv, phoneTv;
     FloatingActionButton fab;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -189,10 +191,10 @@ public class ProfileFragment extends Fragment {
         });
 
         //fab button click
-        fab.setOnClickListener(new View.OnClickListener() {
+        iv_moreSetting_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showEditProfileDialog();
+                showSettingDialog();
             }
         });
 
@@ -351,6 +353,29 @@ public class ProfileFragment extends Fragment {
     private void requestCameraPermission() {
         //request runtime storage permission
         requestPermissions(cameraPermissions, CAMERA_REQUEST_CODE);
+    }
+
+    private void showSettingDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(null);
+        String options[] = {"Setting"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //handle dialog item clicks
+                if (which == 0) {
+                    //Edit Profile clicked
+                    getActivity()
+                            .getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content, new Fragment_Setting(), "TAG")
+                            .addToBackStack(null)
+                            .commit();
+                }
+            }
+        });
+        //create and show dialog
+        builder.create().show();
     }
 
     private void showEditProfileDialog() {
@@ -1013,6 +1038,7 @@ public class ProfileFragment extends Fragment {
         nameTv = view.findViewById(R.id.nameTv);
         emailTv = view.findViewById(R.id.emailTv);
         phoneTv = view.findViewById(R.id.phoneTv);
+        iv_moreSetting_profile = view.findViewById(R.id.iv_moreSetting_profile);
         fab = view.findViewById(R.id.fab);
         postsRecyclerView = view.findViewById(R.id.recyclerview_posts);
         swipeRefreshLayout = view.findViewById(R.id.swipe_profile);

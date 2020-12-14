@@ -20,7 +20,6 @@
     <RelativeLayout
         android:id="@+id/rlt_yourThink"
         app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include layout="@layout/include_post"/>
@@ -34,7 +33,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/rlt_yourThink">
 
 <!--        <include layout="@layout/include_post_2" />-->
 

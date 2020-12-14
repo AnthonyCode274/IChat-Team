@@ -2,9 +2,33 @@ package com.example.ichat.models;
 
 public class Post {
     //use same name as we given while uploading post
-    String pId, pTitle, pDescr,pLikes, pComments, pImage, pTime, uid, uEmail, uDp, uName;
-
+    private String pId, pTitle, pDescr, pLikes, pComments, pImage, pTime, uid, uEmail, uDp, uName;
+    private String gender, birthday, username;
     public Post() {
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Post(String pId, String pTitle, String pDescr, String pLikes, String pComments, String pImage, String pTime, String uid, String uEmail, String uDp, String uName) {

@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <RelativeLayout
         android:id="@+id/rlt_toolbar"
         android:layout_width="match_parent"
@@ -18,17 +17,21 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
+        <RelativeLayout
+            android:id="@+id/rlt_yourThink"
+            app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/include_post"/>
+
+        </RelativeLayout>
+
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            app:layout_constraintTop_toBottomOf="@+id/rlt_yourThink"
             android:id="@+id/home_SwipeRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/postsRecyclerview"
@@ -38,17 +41,35 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <ProgressBar
-            android:id="@+id/main_progress"
-            android:visibility="gone"
-            android:indeterminateTint="@color/colorPrimary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+    <ProgressBar
+        android:id="@+id/main_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/rlt_error_loadingHome"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/rlt_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:layout_height="0dp">
 
         <include layout="@layout/error_layout"/>
 
-    </FrameLayout>
+    </LinearLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,8 +24,7 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="ThemeHome"
-         parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+    <style name="ThemeHome" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryClone</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -39,6 +38,7 @@
     <style name="MenuStyle" parent="Theme.AppCompat.Light">
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="ThemeSplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
@@ -88,6 +88,30 @@
         <item name="android:layout_marginRight">25dp</item>
     </style>
 
+    <style name="style_title_editText_profile">
+
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginLeft">60dp</item>
+
+    </style>
+
+    <style name="styleEditTextProfile">
+        <item name="android:elevation">4dp</item>
+        <item name="background">@drawable/round_edittext2</item>
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:ems">10</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/blackHint</item>
+        <item name="android:textSize">18sp</item>
+        <item name="paddingStart">20dp</item>
+        <item name="paddingEnd">20dp</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:layout_marginRight">25dp</item>
+    </style>
+
     <style name="styleButton">
         <item name="android:elevation">6dp</item>
         <item name="android:background">@drawable/set_called_button</item>
@@ -100,6 +124,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
 
     <style name="styleDescription">
         <item name="android:textSize">18sp</item>
@@ -176,9 +201,12 @@
         <item name="android:layout_height">350dp</item>
     </style>
 
-    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">@color/colorPrimary</item>
-        <item name="android:background">@color/colorTransparent</item>
+    <style name="styleToolbarCustom">
+        <item name="fontFamily">@font/a</item>
     </style>
+
+    <style name="ToggleSwitchTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>

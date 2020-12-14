@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/toolbar_main"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/mauchinh"
+<Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:fitsSystemWindows="true"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    android:id="@+id/toolbar_profile"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,57 +23,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
-                android:layout_toLeftOf="@id/rlBell"
+                android:layout_toLeftOf="@id/iv_moreSetting_profile"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="Home"
                     android:fontFamily="@font/a"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:text="Profile"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
-
             </LinearLayout>
 
+
             <RelativeLayout
-                android:id="@+id/rlBell"
+                android:id="@+id/iv_moreSetting_profile"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="16dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/ivBell"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:id="@+id/btnSetting_Profile"
+                    app:tint="@color/black"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_margin="1dp"
-                    android:background="@drawable/ic_bell" />
-
-                <TextView
-                    android:id="@+id/iv_online"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/bg_bell"
-                    android:fontFamily="@font/arialbd"
-                    android:gravity="center"
-                    android:text="3"
-                    android:textColor="@color/white" />
+                    android:background="@drawable/ic_menu3" />
 
             </RelativeLayout>
 
         </RelativeLayout>
 
     </LinearLayout>
-
-
-</androidx.appcompat.widget.Toolbar>
+</Toolbar>
