@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
-                    android:fontFamily="@font/arial"
+                    android:fontFamily="@font/a"
                     android:letterSpacing="0.01"
                     android:lineSpacingExtra="4sp"
                     android:text="Holy accoustic tonight Chance The Rapper"

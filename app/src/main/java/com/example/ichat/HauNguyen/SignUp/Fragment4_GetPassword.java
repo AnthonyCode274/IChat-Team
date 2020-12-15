@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ichat.HauNguyen.DAO.UserDAO;
 import com.example.ichat.HauNguyen.Login.LoginActivity;
-import com.example.ichat.HauNguyen.Model.User_Profile;
 import com.example.ichat.R;
+import com.example.ichat.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,17 +38,18 @@ import java.util.regex.Pattern;
 
 public class Fragment4_GetPassword extends Fragment {
     private static final String TAG = "Fragment4_GetPassword";
-    public EditText edtNewPass, edtConfirmPass;
+    public EditText txt_Email, edtPassword;
     String email, gender, birthday, username, fullName, password;
     //Firebase
     String userID;
     private Button btnFm5;
     private ProgressBar progressBar_fm5;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private FirebaseFirestore fStore;
-    private DatabaseReference mDatabase;
+
     UserDAO userDAO;
-    User_Profile user_profile;
+    User user_profile;
 
     public static boolean isValidPassword(String password) {
         //begin
@@ -66,41 +67,23 @@ public class Fragment4_GetPassword extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_fragment4_password, container, false);
         innitView(view);
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            email = bundle.getString("EMAIL_FM3");
-            gender = bundle.getString("GENDER_FM3");
-            birthday = bundle.getString("BIRTHDAY_FM3");
-            username = bundle.getString("USER_NAME_FM3");
-            fullName = bundle.getString("Full_name_FM3");
-            Log.i(TAG, "Show DATA ==/ " + bundle);
-            Toast.makeText(getActivity(),
-                    email + "\n" +
-                            gender + "\n" +
-                            birthday + "\n" +
-                            username + "\n" +
-                            fullName, Toast.LENGTH_SHORT).show();
-        }
-
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        //loading dialog
+        user = mAuth.getCurrentUser();
 
+
+        //loading dialog
 
         btnFm5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     showProgress();
-                    String newPass = edtNewPass.getText().toString().trim();
-                    String confirmPass = edtConfirmPass.getText().toString().trim();
-                    if (newPass.length() < 6 || !isValidPassword(newPass) || !newPass.equals(confirmPass)) {
+                    String newPass = edtPassword.getText().toString().trim();
+                    if (newPass.length() < 6 || !isValidPassword(newPass)) {
                         Toast.makeText(getActivity(), "Invalid or incorrect password, please try again!", Toast.LENGTH_SHORT).show();
                         hideProgress();
                         return;
                     } else {
-                        password = confirmPass;
-                        Toast.makeText(getActivity(), email + "\n" + gender + "\n" + birthday + "\n" + username + "\n" + fullName + "\n" + password, Toast.LENGTH_SHORT).show();
                         createUserAuthentication();
                     }
                 } catch (Exception e) {
@@ -115,6 +98,8 @@ public class Fragment4_GetPassword extends Fragment {
     }
 
     private void createUserAuthentication() {
+        email = txt_Email.getText().toString().trim();
+        password = edtPassword.getText().toString().trim();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -136,6 +121,8 @@ public class Fragment4_GetPassword extends Fragment {
                                     Log.d(TAG, "onFailure: Email not sent " + e.getMessage());
                                 }
                             });
+
+                            //insertDataToFirebaseRealTime();
                             Toast.makeText(getActivity(), "User Created.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(), LoginActivity.class));
                         } else {
@@ -145,6 +132,35 @@ public class Fragment4_GetPassword extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void insertDataToFirebaseRealTime() {
+        user = mAuth.getCurrentUser();
+        if (user != null) {
+            userID = user.getUid();
+
+            HashMap<Object, String> hashMap = new HashMap<>();
+            //put info in hasmap
+            hashMap.put("email", email);
+            hashMap.put("uid", userID);
+            hashMap.put("name", fullName); //will add later (e.g. edit profile)
+            hashMap.put("gender", gender); //will add later (e.g. edit profile)
+            hashMap.put("birthday", birthday); //will add later (e.g. edit profile)
+            hashMap.put("username", username); //will add later (e.g. edit profile)
+            hashMap.put("onlineStatus", "online"); //will add later (e.g. edit profile)
+            hashMap.put("typingTo", "noOne"); //will add later (e.g. edit profile)
+            hashMap.put("phone", ""); //will add later (e.g. edit profile)
+            hashMap.put("image", ""); //will add later (e.g. edit profile)
+            hashMap.put("cover", ""); //will add later (e.g. edit profile)
+
+            //firebase database isntance
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            //path to store user data named "Users"
+            DatabaseReference reference = database.getReference("Users");
+            //put data within hashmap in database
+            reference.child(userID).setValue(hashMap);
+
+        }
     }
 
     public void addDataFireStore(String fullName, String email, String phone, String username, String birthday, String gender, String password) {
@@ -177,18 +193,10 @@ public class Fragment4_GetPassword extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("Emails_fm5", email);
         bundle.putString("password_fm5", password);
-        bundle.putString("username_fm5", username);
-        bundle.putString("fullname_fm5", fullName);
-        bundle.putString("birthday_fm5", birthday);
-        bundle.putString("gender_fm5", gender);
         intent.putExtras(bundle);
         Log.i(TAG, "sendData: "
                 + email + "\n"
-                + password + "\n"
-                + gender + "\n"
-                + birthday + "\n"
-                + username + "\n"
-                + fullName);
+                + password);
         getActivity().startActivity(intent);
         getActivity().finish();
     }
@@ -205,8 +213,8 @@ public class Fragment4_GetPassword extends Fragment {
 
     private void innitView(View view) {
         btnFm5 = view.findViewById(R.id.btnFm5);
-        edtNewPass = view.findViewById(R.id.txtNewPass);
-        edtConfirmPass = view.findViewById(R.id.txtConfirmPass);
+        txt_Email = view.findViewById(R.id.txt_Email);
+        edtPassword = view.findViewById(R.id.txtConfirmPass);
         progressBar_fm5 = view.findViewById(R.id.progressBar_fm5);
     }
 

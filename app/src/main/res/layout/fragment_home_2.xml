@@ -17,52 +17,65 @@
 
     </RelativeLayout>
 
+    <ScrollView
+        android:translationZ="1dp"
+        app:layout_constraintTop_toBottomOf="@id/rlt_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
         <RelativeLayout
-            android:id="@+id/rlt_yourThink"
-            app:layout_constraintTop_toBottomOf="@+id/rlt_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <include layout="@layout/include_post"/>
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/rlt_yourThink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <include layout="@layout/include_post"/>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_below="@id/rlt_yourThink"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:translationZ="2dp"
+                    android:id="@+id/postsRecyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+
 
         </RelativeLayout>
 
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            app:layout_constraintTop_toBottomOf="@+id/rlt_yourThink"
-            android:id="@+id/home_SwipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/postsRecyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"/>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </ScrollView>
 
     <ProgressBar
-        android:id="@+id/main_progress"
+        android:id="@+id/main_progress_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminateTint="@color/colorPrimary"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/rlt_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/rlt_error_loadingHome"
         android:orientation="vertical"
+        android:translationZ="3dp"
         app:layout_constraintTop_toBottomOf="@id/rlt_toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="match_parent"
         android:gravity="center_vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_height="0dp">
 
         <include layout="@layout/error_layout"/>

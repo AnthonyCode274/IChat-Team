@@ -10,9 +10,11 @@ public class User {
 
     }
 
-    public User(String name, String email, String username, String gender, String birthday) {
+
+    public User(String name, String email, String uid, String username, String gender, String birthday) {
         this.name = name;
         this.email = email;
+        this.uid = uid;
         this.username = username;
         this.gender = gender;
         this.birthday = birthday;
@@ -30,6 +32,31 @@ public class User {
         this.typingTo = typingTo;
         this.isBlocked = isBlocked;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
 
     public String getName() {
         return name;

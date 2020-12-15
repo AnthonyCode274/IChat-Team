@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.ichat.HauNguyen.Login.LoginActivity;
 import com.example.ichat.fragments.ChatListFragment;
+import com.example.ichat.fragments.FragmentProfileDemo2;
 import com.example.ichat.fragments.HomeFragment;
 import com.example.ichat.fragments.NotificationsFragment;
 import com.example.ichat.fragments.ProfileFragment;
@@ -30,7 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 public class DashboardActivity extends AppCompatActivity {
-
+    private static final String TAG = "DashboardActivity";
     //firebase auth
     FirebaseAuth firebaseAuth;
 
@@ -43,11 +44,6 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if(firebaseUser != null){
-//            Intent intent = new Intent(DashboardActivity.this, MainActivity.class);
-//            startActivity(intent);
-//        }
         //Actionbar and its title
 
         //init
@@ -60,7 +56,7 @@ public class DashboardActivity extends AppCompatActivity {
         //home fragment transaction (default, on star)
         HomeFragment fragment1 = new HomeFragment();
         FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-        ft1.replace(R.id.content, fragment1, "");
+        ft1.replace(R.id.content, fragment1, TAG);
         ft1.commit();
 
         checkUserStatus();
@@ -100,7 +96,8 @@ public class DashboardActivity extends AppCompatActivity {
                             return true;
                         case R.id.nav_profile:
                             //profile fragment transaction
-                            ProfileFragment fragment2 = new ProfileFragment();
+                            FragmentProfileDemo2 fragment2 = new FragmentProfileDemo2();
+
                             FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
                             ft2.replace(R.id.content, fragment2, "");
                             ft2.commit();

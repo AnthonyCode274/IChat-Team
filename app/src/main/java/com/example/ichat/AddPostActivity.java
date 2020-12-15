@@ -13,12 +13,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.ichat.HauNguyen.Login.LoginActivity;
+import com.example.ichat.fragments.HomeFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -64,8 +66,6 @@ public class AddPostActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     DatabaseReference userDbRef;
 
-    ActionBar actionBar;
-
 
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 200;
@@ -77,33 +77,28 @@ public class AddPostActivity extends AppCompatActivity {
     String[] cameraPermissions;
     String[] storagePermissions;
 
-
+    TextView tvUsername;
     EditText descriptionEt;
-    ImageView imageIv;
-    Button uploadBtn;
-    String name, email, uid, dp;
+    ImageView imageIv, ivImage, ivEmotion;
+    TextView uploadBtn;
+    LinearLayout backInPost;
+    String name, email, uid, dp, username;
     String editDescription, editImage;
     //image picked will be samed in this uri
     Uri image_rui = null;
 
     ProgressDialog pd;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_post);
-
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("Add New Post");
-
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.fragment_inpost);
 
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
 
-        pd = new ProgressDialog(this);
+        pd = new ProgressDialog(AddPostActivity.this);
 
         firebaseAuth = FirebaseAuth.getInstance();
         checkUserStatus();
@@ -111,9 +106,19 @@ public class AddPostActivity extends AppCompatActivity {
         descriptionEt = findViewById(R.id.pDescriptionEt);
         imageIv = findViewById(R.id.pImageIv);
         uploadBtn = findViewById(R.id.pUploadBtn);
-
+        tvUsername = findViewById(R.id.tvUsername);
+        ivImage = findViewById(R.id.ivImage);
+        ivEmotion = findViewById(R.id.ivEmotion);
+        backInPost = findViewById(R.id.backInPost);
         Intent intent = getIntent();
-
+        backInPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AddPostActivity.this, DashboardActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
         String action = intent.getAction();
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
@@ -130,16 +135,14 @@ public class AddPostActivity extends AppCompatActivity {
         final String isUpdateKey = "" + intent.getStringExtra("key");
         final String editPostId = "" + intent.getStringExtra("editPostId");
         if (isUpdateKey.equals("editPost")) {
-            actionBar.setTitle("Update Post");
             uploadBtn.setText("Update");
             loadPostData(editPostId);
         } else {
-            actionBar.setTitle("Add New Post");
             uploadBtn.setText("Upload");
 
         }
 
-        actionBar.setSubtitle(email);
+
 
         userDbRef = FirebaseDatabase.getInstance().getReference("Users");
         Query query = userDbRef.orderByChild("email").equalTo(email);
@@ -150,6 +153,8 @@ public class AddPostActivity extends AppCompatActivity {
                     name = "" + ds.child("name").getValue();
                     email = "" + ds.child("email").getValue();
                     dp = "" + ds.child("image").getValue();
+                    username = "" + ds.child("username").getValue();
+                    tvUsername.setText(username);
                 }
             }
 
@@ -160,7 +165,7 @@ public class AddPostActivity extends AppCompatActivity {
         });
 
 
-        imageIv.setOnClickListener(new View.OnClickListener() {
+        ivImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showImagePickDialog();
@@ -179,8 +184,10 @@ public class AddPostActivity extends AppCompatActivity {
 
                 if (isUpdateKey.equals("editPost")) {
                     beginUpdate(description, editPostId);
+                    finish();
                 } else {
                     uploadData(description);
+                    finish();
                 }
 
             }
@@ -191,7 +198,6 @@ public class AddPostActivity extends AppCompatActivity {
         Uri imageURI = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
         if (imageURI != null) {
             image_rui = imageURI;
-            //set to imageview
             imageIv.setImageURI(image_rui);
         }
     }
@@ -273,7 +279,6 @@ public class AddPostActivity extends AppCompatActivity {
 
                         String downloadUri = uriTask.getResult().toString();
                         if (uriTask.isSuccessful()) {
-                            //url is recieved, upload to firbease database
 
                             HashMap<String, Object> hashMap = new HashMap<>();
                             //put post info
@@ -499,7 +504,7 @@ public class AddPostActivity extends AppCompatActivity {
                                                 //send notification
                                                 prepareNotification(
                                                         "" + timeStamp,//since we are using timestamp for post id
-                                                        ""+ description,
+                                                        "" + description,
                                                         "PostNotification",
                                                         "POST"
                                                 );
@@ -561,7 +566,7 @@ public class AddPostActivity extends AppCompatActivity {
                             //send notification
                             prepareNotification(
                                     "" + timeStamp,//since we are using timestamp for post id
-                                    ""+ description,
+                                    "" + description,
                                     "PostNotification",
                                     "POST"
                             );
@@ -606,7 +611,7 @@ public class AddPostActivity extends AppCompatActivity {
 
             notificationJo.put("data", notificationBodyJo);//combine data to be sent
         } catch (JSONException e) {
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddPostActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -641,7 +646,7 @@ public class AddPostActivity extends AppCompatActivity {
             }
         };
         //enqueue the volley request
-        Volley.newRequestQueue(this).add(jsonObjectRequest);
+        Volley.newRequestQueue(AddPostActivity.this).add(jsonObjectRequest);
     }
 
     private void showImagePickDialog() {
@@ -649,7 +654,7 @@ public class AddPostActivity extends AppCompatActivity {
         String[] options = {"Camera", "Gallery"};
 
         //dialog
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddPostActivity.this);
         builder.setTitle("Choose Image from");
         //set options to dialog
         builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -702,14 +707,14 @@ public class AddPostActivity extends AppCompatActivity {
         //check if storage permission is enabled or not
         //return true if enabled
         //return false if not enabled
-        boolean result = ContextCompat.checkSelfPermission(this,
+        boolean result = ContextCompat.checkSelfPermission(AddPostActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
         return result;
     }
 
     private void requestStoragePermission() {
         //request runtime storage permission
-        ActivityCompat.requestPermissions(this, storagePermissions, STORAGE_REQUEST_CODE);
+        ActivityCompat.requestPermissions(AddPostActivity.this, storagePermissions, STORAGE_REQUEST_CODE);
     }
 
 
@@ -717,27 +722,27 @@ public class AddPostActivity extends AppCompatActivity {
         //check if camera permission is enabled or not
         //return true if enabled
         //return false if not enabled
-        boolean result = ContextCompat.checkSelfPermission(this,
+        boolean result = ContextCompat.checkSelfPermission(AddPostActivity.this,
                 Manifest.permission.CAMERA) == (PackageManager.PERMISSION_GRANTED);
-        boolean result1 = ContextCompat.checkSelfPermission(this,
+        boolean result1 = ContextCompat.checkSelfPermission(AddPostActivity.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
         return result && result1;
     }
 
     private void requestCameraPermission() {
         //request runtime camera permission
-        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
+        ActivityCompat.requestPermissions(AddPostActivity.this, cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         checkUserStatus();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         checkUserStatus();
     }
@@ -746,31 +751,14 @@ public class AddPostActivity extends AppCompatActivity {
         //get current user
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            //user is signed in stay here
             email = user.getEmail();
             uid = user.getUid();
         } else {
-            //user not signed in, go to main acitivity
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(AddPostActivity.this, LoginActivity.class));
             finish();
         }
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        onBackPressed(); //goto previous activity
-        return super.onSupportNavigateUp();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-
-        menu.findItem(R.id.action_add_post).setVisible(false);
-        menu.findItem(R.id.action_search).setVisible(false);
-        return super.onCreateOptionsMenu(menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -800,7 +788,7 @@ public class AddPostActivity extends AppCompatActivity {
                         pickFromCamera();
                     } else {
                         //camera or gallery or both permissions were denied
-                        Toast.makeText(this, "Camera & Storage both permissions are necessary...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPostActivity.this, "Camera & Storage both permissions are necessary...", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                 }
@@ -814,7 +802,7 @@ public class AddPostActivity extends AppCompatActivity {
                         pickFromGallery();
                     } else {
                         //camera or gallery or both permissions were denied
-                        Toast.makeText(this, "Storage permissions necessary...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPostActivity.this, "Storage permissions necessary...", Toast.LENGTH_SHORT).show();
                     }
                 } else {
 
@@ -825,18 +813,13 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //this method will be called after picking image from camera or gallery
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK) {
-
             if (requestCode == IMAGE_PICK_GALLERY_CODE) {
-                //image is picked from gallery, get uri of image
                 image_rui = data.getData();
 
-                //set to imageview
                 imageIv.setImageURI(image_rui);
             } else if (requestCode == IMAGE_PICK_CAMERA_CODE) {
-                //image is picked from camera, get uri of image
 
                 imageIv.setImageURI(image_rui);
             }
@@ -844,4 +827,6 @@ public class AddPostActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

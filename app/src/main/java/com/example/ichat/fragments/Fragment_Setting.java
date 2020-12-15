@@ -1,6 +1,7 @@
 package com.example.ichat.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,17 +13,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.ichat.HauNguyen.Login.LoginActivity;
 import com.example.ichat.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Fragment_Setting extends Fragment {
     LinearLayout llBack;
     RelativeLayout btn_editProfile, rlt_changePassword, rlt_logout;
+    FirebaseAuth mAuth;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment__setting, container, false);
         innitView(view);
+
+        mAuth = FirebaseAuth.getInstance();
 
         llBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +55,31 @@ public class Fragment_Setting extends Fragment {
             }
         });
 
+        rlt_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                checkUserStatus();
+            }
+        });
+
+
+
         return view;
+    }
+
+    private void checkUserStatus() {
+        //get current user
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            //user is signed in stay here
+            //set email of logged in user
+            //mProfileTv.setText(user.getEmail());
+        } else {
+            //user not signed in, go to main acitivity
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            getActivity().finish();
+        }
     }
 
     private void innitView(View view) {

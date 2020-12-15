@@ -43,7 +43,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
@@ -65,7 +65,7 @@
 
                         <ImageView
                             android:layout_gravity="center_vertical"
-                            android:layout_width="24dp"
+                            android:layout_width="20dp"
                             android:layout_height="24dp"
                             android:background="@drawable/ic_user_black1"
                             android:layout_marginRight="16dp"/>
@@ -73,7 +73,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/arialbd"
+                            android:fontFamily="@font/a"
+                            android:textStyle="bold"
                             android:text="Account"
                             android:layout_gravity="center"
                             android:textSize="18sp"
@@ -87,78 +88,89 @@
                         android:background="@color/gray"/>
 
                     <LinearLayout
-                        android:orientation="horizontal"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="8dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:id="@+id/btn_editProfile"
-                            android:layout_gravity="center_vertical"
+                        <LinearLayout
+                            android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="48dp"
+                            android:layout_marginTop="14dp">
 
-                            <TextView
-                                android:id="@+id/tv_edit_profile"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/arialbd"
-                                android:text="Edit profile"
-                                android:layout_gravity="center_vertical|start|left"
-                                android:textSize="16sp"
-                                android:textColor="@color/gray" />
+                            <RelativeLayout
+                                android:id="@+id/btn_editProfile"
+                                android:layout_gravity="center_vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:layout_marginBottom="6dp"
-                                android:layout_marginTop="6dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_gravity="end|center_vertical"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_back_right"
-                                app:tint="@color/gray"/>
+                                <TextView
+                                    android:id="@+id/tv_edit_profile"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/arialbd"
+                                    android:text="Edit profile"
+                                    android:layout_gravity="center_vertical|start|left"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/gray" />
 
-                        </RelativeLayout>
+                                <ImageView
+                                    android:layout_marginBottom="6dp"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_gravity="end|center_vertical"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ic_back_right"
+                                    app:tint="@color/gray"/>
 
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="8dp">
+
+                            <RelativeLayout
+                                android:id="@+id/rlt_changePassword"
+                                android:layout_gravity="center_vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:id="@+id/tv_change_password"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/arialbd"
+                                    android:text="Change password"
+                                    android:layout_gravity="center_vertical|start|left"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/gray" />
+
+                                <ImageView
+                                    android:layout_marginBottom="6dp"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_gravity="end|center_vertical"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/ic_back_right"
+                                    app:tint="@color/gray"/>
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="0dp">
-
-                        <RelativeLayout
-                            android:id="@+id/rlt_changePassword"
-                            android:layout_gravity="center_vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:id="@+id/tv_change_password"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/arialbd"
-                                android:text="Change password"
-                                android:layout_gravity="center_vertical|start|left"
-                                android:textSize="16sp"
-                                android:textColor="@color/gray" />
-
-                            <ImageView
-                                android:layout_marginBottom="6dp"
-                                android:layout_marginTop="6dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_gravity="end|center_vertical"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/ic_back_right"
-                                app:tint="@color/gray"/>
-
-                        </RelativeLayout>
-
-
-                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -170,7 +182,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
@@ -184,7 +196,6 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -201,7 +212,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/arialbd"
+                            android:fontFamily="@font/a"
+                            android:textStyle="bold"
                             android:text="Notifications"
                             android:layout_gravity="center"
                             android:textSize="18sp"
@@ -214,10 +226,12 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="38dp"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="8dp">
 
                         <RelativeLayout
                             android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -258,7 +272,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
@@ -288,7 +302,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/arialbd"
+                            android:fontFamily="@font/a"
+                            android:textStyle="bold"
                             android:text="More setting"
                             android:layout_gravity="center"
                             android:textSize="18sp"
@@ -301,11 +316,17 @@
                         android:layout_height="0.3dp"
                         android:background="@color/gray"/>
 
+                <LinearLayout
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginTop="8dp">
+                        android:layout_height="48dp">
 
                         <RelativeLayout
                             android:layout_gravity="center_vertical"
@@ -350,9 +371,10 @@
 
                         <RelativeLayout
                             android:id="@+id/rlt_logout"
+                            android:gravity="center_vertical"
                             android:layout_gravity="center_vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="match_parent">
 
                             <TextView
                                 android:id="@+id/tv_logout"
@@ -377,6 +399,9 @@
                         </RelativeLayout>
 
                     </LinearLayout>
+
+                </LinearLayout>
+
 
                 </LinearLayout>
 

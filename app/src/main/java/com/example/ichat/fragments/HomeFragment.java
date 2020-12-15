@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
+import com.example.ichat.AddPostActivity;
 import com.example.ichat.DashboardActivity;
 import com.example.ichat.FragmentIntent.AddpostFragment;
 import com.example.ichat.HauNguyen.Login.LoginActivity;
@@ -44,6 +45,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -68,12 +70,16 @@ public class HomeFragment extends Fragment {
     TextView txtError;
     //firebase auth
     FirebaseAuth firebaseAuth;
+    DatabaseReference databaseReference;
+    FirebaseDatabase firebaseDatabase;
+    FirebaseUser firebaseUser;
     List<User> users;
     RecyclerView recyclerView;
     List<Post> postList;
     AdapterPosts adapterPosts;
     int position;
     String hisDp;
+    String image;
 
 
     public HomeFragment() {
@@ -85,32 +91,27 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_2, container, false);
         innitView(view);
-        //init
+        rlt_error_loadingHome.setVisibility(View.INVISIBLE);
+
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Users");
 //        getImage();
         //recycler view and its properties
         linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-//        clickPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startFragment();
-//            }
-//        });
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        //show newest post first, for this load from last
         layoutManager.setStackFromEnd(true);
         layoutManager.setReverseLayout(true);
-        //set layout to recyclerview
         recyclerView.setLayoutManager(layoutManager);
-        //init post list
         postList = new ArrayList<>();
-
+        getImage();
+        loadPosts();
 
         rlBell.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,31 +119,10 @@ public class HomeFragment extends Fragment {
                 //Notifications fragment transaction
                 NotificationsFragment fragment5 = new NotificationsFragment();
                 FragmentTransaction ft5 = getActivity().getSupportFragmentManager().beginTransaction();
-                ft5.replace(R.id.content, fragment5, "");
+                ft5.replace(R.id.content, fragment5, TAG);
                 ft5.commit();
             }
         });
-
-        swipeRefreshLayout.setRefreshing(false);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.white);
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadPosts();
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 500);
-
-            }
-
-        });
-
-        loadPosts();
 
         btnRetry.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,75 +131,90 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        rlt_yourThink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), AddPostActivity.class);
+                startActivity(i);
+            }
+        });
 
         return view;
     }
 
     private void getImage() {
-        User user = users.get(position);
-        if (user.getImage().equals("noImage")) {
-            ivAvatar.setImageResource(R.mipmap.ic_launcher);
-        } else {
-            Glide.with(getActivity()).load(user.getImage()).into(ivAvatar);
-        }
-
-    }
-
-    private void loadPosts() {
-        //path of all posts
-        progressBar.setVisibility(View.VISIBLE);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
-        //get all data from this ref
-        ref.addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                postList.clear();
+
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    hisDp = "" + ds.child("uDp").getValue();
-
+                    image = "" + ds.child("image").getValue();
                     try {
-                        Picasso.get().load(hisDp).placeholder(R.drawable.photo).into(ivAvatar);
+                        Picasso.get().load(image).into(ivAvatar);
                     } catch (Exception e) {
-                        //Picasso.get().load(R.drawable.photo).into(ivAvatar);
-                        Log.e(TAG, "onDataChange: " + e.getMessage());
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
-
-                    Post post = ds.getValue(Post.class);
-
-                    postList.add(post);
-                    //postList = null;
-
-                    //adapter
-                    adapterPosts = new AdapterPosts(getActivity(), postList);
-                    //set adapter to recyclerview
-
-                    if (postList != null){
-                        recyclerView.setAdapter(adapterPosts);
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }else {
-                        rlt_yourThink.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.GONE);
-                        rlt_error_loadingHome.setVisibility(View.VISIBLE);
-                        error_layout.setVisibility(View.VISIBLE);
+                        Picasso.get().load(R.drawable.ic_user_default).into(ivAvatar);
                     }
 
                 }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //in case of error
-//                Toast.makeText(getActivity(), "" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
     }
 
+
+
+    private void loadPosts() {
+        try {
+            progressBar.setVisibility(View.VISIBLE);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    postList.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        hisDp = "" + ds.child("uDp").getValue();
+
+                        try {
+                            Picasso.get().load(hisDp).placeholder(R.drawable.photo).into(ivAvatar);
+                        } catch (Exception e) {
+                            //Picasso.get().load(R.drawable.photo).into(ivAvatar);
+                            Log.e(TAG, "onDataChange: " + e.getMessage());
+
+                        }
+                        Post post = ds.getValue(Post.class);
+                        if (post != null){
+                            postList.add(post);
+                            adapterPosts = new AdapterPosts(getContext(), postList);
+                            recyclerView.setAdapter(adapterPosts);
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    //in case of error
+                Toast.makeText(getActivity(), "" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }catch (Exception e){
+            Log.e(TAG, "loadPosts: " + e.getMessage());
+            progressBar.setVisibility(View.INVISIBLE);
+            rlt_error_loadingHome.setVisibility(View.VISIBLE);
+        }
+
+    }
+
     private void searchPosts(final String searchQuery) {
 
-        //path of all posts
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
-        //get all data from this ref
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -242,7 +237,6 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                //in case of error
 //                Toast.makeText(getActivity(), "" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -252,17 +246,23 @@ public class HomeFragment extends Fragment {
 
 
     private void checkUserStatus() {
-        //get current user
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-            //user is signed in stay here
-            //set email of logged in user
-            //mProfileTv.setText(user.getEmail());
-        } else {
-            //user not signed in, go to main acitivity
+        try {
+            //get current user
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user == null) {
+
+            } else {
+                //user not signed in, go to main acitivity
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+                getActivity().finish();
+            }
+        }catch (Exception e){
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(getActivity(), "User is not register!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), LoginActivity.class));
             getActivity().finish();
         }
+
     }
 
     @Override
@@ -335,16 +335,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void startFragment() {
-        //start fragment
-//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_inpost, fm, TAG)
-//                .addToBackStack(null)
-//                .commit();
-
-//        AddpostFragment addpostFragment = new AddpostFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//        transaction.replace(R.id.fragment_inpost, addpostFragment);
-//        transaction.commit();
-//        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_inpost, addpostFragment, TAG).addToBackStack(null).commit();
         AddpostFragment addpostFragment = new AddpostFragment();
         getFragmentManager().beginTransaction().replace(R.id.content, addpostFragment).commit();
     }
@@ -353,9 +343,8 @@ public class HomeFragment extends Fragment {
         ivAvatar = view.findViewById(R.id.ivAvatar);
         rlBell = view.findViewById(R.id.rlBell);
         recyclerView = view.findViewById(R.id.postsRecyclerview);
-        swipeRefreshLayout = view.findViewById(R.id.home_SwipeRefreshLayout);
         clickPhoto = (TextView) view.findViewById(R.id.tvContent);
-        progressBar = view.findViewById(R.id.main_progress);
+        progressBar = view.findViewById(R.id.main_progress_home);
         btnRetry = view.findViewById(R.id.error_btn_retry);
         txtError = view.findViewById(R.id.error_txt_cause);
         rlt_yourThink = view.findViewById(R.id.rlt_yourThink);

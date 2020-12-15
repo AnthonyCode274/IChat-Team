@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "131633852417",
-    "firebase_url": "https://ichat-53ec0.firebaseio.com",
-    "project_id": "ichat-53ec0",
-    "storage_bucket": "ichat-53ec0.appspot.com"
+    "project_number": "551480812820",
+    "firebase_url": "https://ichat2-ac316-default-rtdb.firebaseio.com",
+    "project_id": "ichat2-ac316",
+    "storage_bucket": "ichat2-ac316.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:131633852417:android:82c2c081a50f110f841000",
+        "mobilesdk_app_id": "1:551480812820:android:75c5b2a4cabb69a5590e01",
         "android_client_info": {
           "package_name": "com.example.ichat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "131633852417-onbovmsfv87krkll006nicouusd56nm5.apps.googleusercontent.com",
+          "client_id": "551480812820-r9j5tic47jjnalfgeuaifd7g47u2hfo7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.ichat",
-            "certificate_hash": "492653ede4c91d62b025c0937001baa7b0801763"
+            "certificate_hash": "6a9c65afe2e456ebac8596093319ce5311213008"
           }
         },
         {
-          "client_id": "131633852417-4bcdjsld7r9kelo8u7i4u7850ibag4h5.apps.googleusercontent.com",
+          "client_id": "551480812820-6abr8bkb56vjn9saptukvuj1258941oa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJM-QRCf5xh7YEjlyqSP9KU05BdoEMhLQ"
+          "current_key": "AIzaSyAwGDvY4K3aCDDRbv9Iaezny6dsOBWk8W4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "131633852417-4bcdjsld7r9kelo8u7i4u7850ibag4h5.apps.googleusercontent.com",
+              "client_id": "551480812820-6abr8bkb56vjn9saptukvuj1258941oa.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

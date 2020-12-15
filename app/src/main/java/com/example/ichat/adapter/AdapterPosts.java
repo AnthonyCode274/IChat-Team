@@ -1,5 +1,6 @@
 package com.example.ichat.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,12 +8,14 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,10 +48,16 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import static com.example.ichat.fragments.ProfileFragment.getUsername;
 
 public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
@@ -86,6 +95,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         final String uid = postList.get(i).getUid();
         String uEmail = postList.get(i).getuEmail();
         String uName = postList.get(i).getuName();
+        String uUsername = getUsername;
         String uDp = postList.get(i).getuDp();
         final String pId = postList.get(i).getpId();
 //        final String pTitle = postList.get(i).getpTitle();
@@ -95,14 +105,10 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         String pLikes = postList.get(i).getpLikes(); //contains total number of likes for a post
         String pComments = postList.get(i).getpComments(); //contains total number of likes for a post
 
-        //convert timestamp to dd/mm/yyyy hh:mm am/pm
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        calendar.setTimeInMillis(Long.parseLong(pTimeStamp));
-        String pTime = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
 
         //set data
-        myHolder.uNameTv.setText(uName);
-        myHolder.pTimeTv.setText(pTime);
+        myHolder.uNameTv.setText(uUsername);
+        myHolder.pTimeTv.setText(covertTimeToText(pTimeStamp));
 //        myHolder.pTitleTv.setText(pTitle);
         myHolder.pDescriptionTv.setText(pDescription);
         myHolder.pLikesTv.setText(pLikes + ""); //e.g. 100 Likes
@@ -223,7 +229,56 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
 
     }
+    public String covertTimeToText(String dataDate) {
 
+        String convTime = null;
+
+        String prefix = "";
+        String suffix = "trước";
+
+        try {
+
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(Long.parseLong(dataDate));
+            Date d = (Date) c.getTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = format.format(d);
+            Date pasTime = format.parse(time);
+
+            Date nowTime = new Date();
+
+            long dateDiff = nowTime.getTime() - pasTime.getTime();
+
+            long second = TimeUnit.MILLISECONDS.toSeconds(dateDiff);
+            long minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff);
+            long hour   = TimeUnit.MILLISECONDS.toHours(dateDiff);
+            long day  = TimeUnit.MILLISECONDS.toDays(dateDiff);
+
+            if (second < 60) {
+                convTime = second + " giây " + suffix;
+            } else if (minute < 60) {
+                convTime = minute + " phút "+suffix;
+            } else if (hour < 24) {
+                convTime = hour + " giờ "+suffix;
+            } else if (day >= 7) {
+                if (day > 360) {
+                    convTime = (day / 360) + " năm " + suffix;
+                } else if (day > 30) {
+                    convTime = (day / 30) + " tháng " + suffix;
+                } else {
+                    convTime = (day / 7) + " tuần " + suffix;
+                }
+            } else if (day < 7) {
+                convTime = day+" ngày "+suffix;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("ConvTimeE", e.getMessage());
+        }
+
+        return convTime;
+    }
 
     private void addToHisNotifications(String hisUid, String pId, String notification) {
         //timestamp for time and notification id
@@ -304,6 +359,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
     private void setLikes(final MyHolder holder, final String postKey) {
         likesRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(postKey).hasChild(myUid)) {
@@ -311,15 +367,15 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                     /*To indicate that the post is liked by this(SignedIn) user
                     Change drawable left icon of like button
                     Change text of like button from "Like" to "Liked"*/
-
-                    holder.likeBtn.setImageResource(R.drawable.ic_heart_liked);
+                    //holder.likeBtn.setTextColor(R.color.red);
+                    holder.ll_like_post.setImageResource(R.drawable.ic_heart_liked);
 //                    holder.likeBtn.setText("Liked");
                 } else {
                     //user has not liked this post
                     /*To indicate that the post is not liked by this(SignedIn) user
                     Change drawable left icon of like button
                     Change text of like button from "Liked" to "Like"*/
-                    holder.likeBtn.setImageResource(R.drawable.ic_heart);
+                    holder.ll_like_post.setImageResource(R.drawable.ic_heart);
 //                    holder.likeBtn.setText("Like");
                 }
             }
@@ -465,10 +521,11 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     class MyHolder extends RecyclerView.ViewHolder {
 
         //views from row_post.xml
-        ImageView uPictureIv, pImageIv, likeBtn, commentBtn, shareBtn;
+        ImageView uPictureIv, pImageIv, commentBtn, shareBtn, ll_like_post;
         TextView uNameTv, pTimeTv, pDescriptionTv, pLikesTv, pCommentsTv;
         ImageButton moreBtn;
-        LinearLayout profileLayout, ll_like_post;
+        Button likeBtn;
+        LinearLayout profileLayout;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);

@@ -5,8 +5,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.ichat.HauNguyen.FragmentHome;
-import com.example.ichat.HauNguyen.Model.User_Profile;
+import com.example.ichat.adapter.AdapterUsers;
+import com.example.ichat.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,41 +18,39 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import static com.example.ichat.HauNguyen.FragmentHome.adapterUser;
-import static com.example.ichat.HauNguyen.FragmentHome.dataUser;
-
 
 public class UserDAO {
     Context context;
     DatabaseReference mRef;
     String key;
-    FragmentHome fragmentHome;
+    ArrayList<User> list;
+    AdapterUsers adapterUsers;
 
     public UserDAO(Context context) {
         this.context = context;
-        this.mRef = FirebaseDatabase.getInstance().getReference("Users_Profile");
+        this.mRef = FirebaseDatabase.getInstance().getReference("Users");
     }
 
-    public UserDAO(Context context, FragmentHome fragmentHome) {
+    public UserDAO(Context context, ArrayList<User> list) {
         this.context = context;
-        this.fragmentHome = fragmentHome;
-        this.mRef = FirebaseDatabase.getInstance().getReference("Users_Profile");
+        this.list = list;
+        this.mRef = FirebaseDatabase.getInstance().getReference("Users");
     }
 
-    public ArrayList<User_Profile> getAll() {
+    public ArrayList<User> getAll() {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    dataUser.clear();
+                    list.clear();
                     Iterable<DataSnapshot> dataSnapshotIterable = snapshot.getChildren();
                     Iterator<DataSnapshot> iterator = dataSnapshotIterable.iterator();
                     while (iterator.hasNext()) {
                         DataSnapshot next = (DataSnapshot) iterator.next();
-                        User_Profile theloaisach = next.getValue(User_Profile.class);
-                        dataUser.add(theloaisach);
+                        User theloaisach = next.getValue(User.class);
+                        list.add(theloaisach);
                     }
-                    adapterUser.notifyDataSetChanged();
+
                 }
             }
 
@@ -61,10 +59,10 @@ public class UserDAO {
 
             }
         });
-        return dataUser;
+        return list;
     }
 
-    public void insert(User_Profile item) {
+    public void insert(User item) {
         // push cây theo mã tự tạo
         // string key lấy mã push
         key = mRef.push().getKey();
@@ -82,16 +80,16 @@ public class UserDAO {
         });
     }
 
-    public boolean update(final User_Profile item) {
+    public boolean update(final User item) {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("email").getValue(String.class).equalsIgnoreCase(item.getEmail())) {
+                    if (dataSnapshot.child("uid").getValue(String.class).equalsIgnoreCase(item.getUid())) {
                         key = dataSnapshot.getKey();
                         mRef.child(key).setValue(item);
                         Toast.makeText(context, "Update Thành Công", Toast.LENGTH_SHORT).show();
-                        adapterUser.notifyDataSetChanged();
+
                     }
                 }
             }
@@ -101,11 +99,11 @@ public class UserDAO {
 
             }
         });
-        adapterUser.notifyDataSetChanged();
+
         return true;
     }
 
-    public void delete(final User_Profile item) {
+    public void delete(final User item) {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -126,7 +124,7 @@ public class UserDAO {
                     }
 
                 }
-                adapterUser.notifyDataSetChanged();
+                adapterUsers.notifyDataSetChanged();
             }
 
             @Override

@@ -15,12 +15,14 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginLeft="16dp"
             android:id="@+id/avatarIv"
             android:src="@drawable/a1"
             android:layout_width="70dp"
             android:layout_height="70dp" />
 
         <LinearLayout
+            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

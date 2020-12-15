@@ -10,6 +10,7 @@
 
 
     <LinearLayout
+        android:layout_marginStart="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -33,10 +34,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_marginRight="20dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_icon_back_black"
+                        android:src="@drawable/ic_arrow_back_ios_24px"
                         android:layout_gravity="center_vertical"/>
 
                     <TextView
@@ -44,10 +45,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/a"
+                        android:textStyle="bold"
                         android:text="Setting"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"/>
                 </LinearLayout>
 
             </LinearLayout>

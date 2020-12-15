@@ -13,21 +13,26 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ichat.DashboardActivity;
-import com.example.ichat.HauNguyen.FragmentHome;
+import com.example.ichat.HauNguyen.Login.LoginActivity;
 import com.example.ichat.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class SplashScreenActivity extends AppCompatActivity {
-    Animation sideAnim;
     private static int SPLASH_SCREEN_TIMEOUT = 2000;
+    Animation sideAnim;
     ImageView imgLogo;
+    FirebaseUser user;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        mAuth = FirebaseAuth.getInstance();
+        checkUserStatus();
         //Hooks
         imgLogo = findViewById(R.id.img_logo);
 
@@ -41,10 +46,10 @@ public class SplashScreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    if (restorePrefData()){
+                    if (restorePrefData()) {
                         startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
                         finish();
-                    }else {
+                    } else {
                         startActivity(new Intent(getApplicationContext(), OnBroading.class));
                         finish();
                     }
@@ -56,6 +61,23 @@ public class SplashScreenActivity extends AppCompatActivity {
         }, SPLASH_SCREEN_TIMEOUT);
 
     }
+
+    private void checkUserStatus() {
+        try {
+            //get current user
+            user = mAuth.getCurrentUser();
+            if (user != null) {
+                startActivity(new Intent(SplashScreenActivity.this, DashboardActivity.class));
+                finish();
+            }
+        } catch (Exception e) {
+            //user not signed in, go to main acitivity
+            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+            finish();
+        }
+
+    }
+
 
     private boolean restorePrefData() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs", MODE_PRIVATE);

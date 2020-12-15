@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +40,8 @@ import java.util.List;
 
 
 public class UsersFragment extends Fragment {
+    private SearchView SearchView;
+    private TextView tvTitle;
 
     RecyclerView recyclerView;
     AdapterUsers adapterUsers;
@@ -59,9 +63,10 @@ public class UsersFragment extends Fragment {
 
         //init
         firebaseAuth = FirebaseAuth.getInstance();
-
         //init recyclerview
         recyclerView = view.findViewById(R.id.users_recyclerView);
+        SearchView = view.findViewById(R.id.sv_user);
+        tvTitle = view.findViewById(R.id.title_user);
         //set it's properties
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -71,6 +76,13 @@ public class UsersFragment extends Fragment {
 
         //getAll users
         getAllUsers();
+
+        SearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "gdgdsghg", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }

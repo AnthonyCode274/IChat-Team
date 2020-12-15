@@ -3,6 +3,7 @@ package com.example.ichat.adapter;
 import android.content.Context;
 import android.content.Intent;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.example.ichat.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -156,7 +160,9 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.ChatHo
 
                     default:
                         last_msg.setText(theLastMessage);
-                        lastTime.setText(sdf.format(theTimeMessage));
+//                        lastTime.setText(sdf.format(theTimeMessage));
+                        lastTime.setText(covertTimeToText(String.valueOf(theTimeMessage)));
+
                         break;
                 }
 
@@ -169,4 +175,55 @@ public class AdapterChatlist extends RecyclerView.Adapter<AdapterChatlist.ChatHo
             }
         });
     }
+    public String covertTimeToText(String dataDate) {
+
+        String convTime = null;
+
+        String prefix = "";
+        String suffix = "trước";
+
+        try {
+
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(Long.parseLong(dataDate));
+            Date d = (Date) c.getTime();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = format.format(d);
+            Date pasTime = format.parse(time);
+
+            Date nowTime = new Date();
+
+            long dateDiff = nowTime.getTime() - pasTime.getTime();
+
+            long second = TimeUnit.MILLISECONDS.toSeconds(dateDiff);
+            long minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff);
+            long hour   = TimeUnit.MILLISECONDS.toHours(dateDiff);
+            long day  = TimeUnit.MILLISECONDS.toDays(dateDiff);
+
+            if (second < 60) {
+                convTime = second + " giây " + suffix;
+            } else if (minute < 60) {
+                convTime = minute + " phút "+suffix;
+            } else if (hour < 24) {
+                convTime = hour + " giờ "+suffix;
+            } else if (day >= 7) {
+                if (day > 360) {
+                    convTime = (day / 360) + " năm " + suffix;
+                } else if (day > 30) {
+                    convTime = (day / 30) + " tháng " + suffix;
+                } else {
+                    convTime = (day / 7) + " tuần " + suffix;
+                }
+            } else if (day < 7) {
+                convTime = day+" ngày "+suffix;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("ConvTimeE", e.getMessage());
+        }
+
+        return convTime;
+    }
+
 }

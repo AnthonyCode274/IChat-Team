@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/colorPrimary"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:fitsSystemWindows="true"
     android:id="@+id/toolbar_profile"
+    android:backgroundTint="@color/colorTransparent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 
     <LinearLayout
+        android:layout_marginStart="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -22,19 +24,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="12dp"
                 android:layout_toLeftOf="@id/iv_moreSetting_profile"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:fontFamily="@font/a"
-                    android:text="Profile"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
 
@@ -49,14 +41,13 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/btnSetting_Profile"
-                    app:tint="@color/black"
+                    app:tint="@color/colorWhite"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_margin="1dp"
-                    android:background="@drawable/ic_menu3" />
+                    android:src="@drawable/ic_menu3" />
 
             </RelativeLayout>
 

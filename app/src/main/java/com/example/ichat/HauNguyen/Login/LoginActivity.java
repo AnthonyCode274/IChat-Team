@@ -27,9 +27,9 @@ import androidx.core.view.ViewCompat;
 import com.example.ichat.DashboardActivity;
 import com.example.ichat.HauNguyen.DAO.UserDAO;
 import com.example.ichat.HauNguyen.ForgotPassword.Content_ForgotPassWord_Activity;
-import com.example.ichat.HauNguyen.Model.User_Profile;
 import com.example.ichat.HauNguyen.SignUp.Content_FrameLayout_Register_Activity;
 import com.example.ichat.R;
+import com.example.ichat.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -44,7 +44,7 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
-    String email, gender, birthday, username, fullName, password, Uid;
+    String email, password, Uid;
     private ImageView logoView;
     private EditText edtEmail, edtPass;
     private final TextWatcher passwordWatcher = new TextWatcher() {
@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            String getText = edtEmail.getText().toString();
+            String getText = edtEmail.getText().toString().trim();
 
             if (Patterns.EMAIL_ADDRESS.matcher(getText).matches()) {
                 edtEmail.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mail_outline_24px, 0, R.drawable.ic_done_24px, 0);
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private UserDAO userDAO;
-    private User_Profile user_profile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,17 +88,9 @@ public class LoginActivity extends AppCompatActivity {
         if (bundle != null) {
             email = bundle.getString("Emails_fm5");
             password = bundle.getString("password_fm5");
-            username = bundle.getString("username_fm5");
-            fullName = bundle.getString("fullname_fm5");
-            birthday = bundle.getString("birthday_fm5");
-            gender = bundle.getString("gender_fm5");
             Log.i(TAG, "LoginActivity get All data: "
                     + email + "\n"
-                    + password + "\n"
-                    + gender + "\n"
-                    + birthday + "\n"
-                    + username + "\n"
-                    + fullName);
+                    + password);
         }
 
         edtEmail.addTextChangedListener(passwordWatcher);
@@ -112,7 +104,6 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 } else {
                     //check email user
-
                     mAuth.fetchSignInMethodsForEmail(edtEmail.getText().toString().trim())
                             .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
                                 @Override
@@ -162,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Email has been verified! :)", Toast.LENGTH_SHORT).show();
                 insertDataToFirebaseRealTime();
                 loginSuccessfully();
+                //insertUser();
                 hideProgressBar();
             } else {
                 // email is not verified, so just prompt the message to the user and restart this activity.
@@ -176,8 +168,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     private void insertDataToFirebaseRealTime() {
         user = mAuth.getCurrentUser();
+
         if (user != null) {
             Uid = user.getUid();
 
@@ -185,10 +179,10 @@ public class LoginActivity extends AppCompatActivity {
             //put info in hasmap
             hashMap.put("email", email);
             hashMap.put("uid", Uid);
-            hashMap.put("name", fullName); //will add later (e.g. edit profile)
-            hashMap.put("gender", gender); //will add later (e.g. edit profile)
-            hashMap.put("birthday", birthday); //will add later (e.g. edit profile)
-            hashMap.put("username", username); //will add later (e.g. edit profile)
+            hashMap.put("name", ""); //will add later (e.g. edit profile)
+            hashMap.put("gender", ""); //will add later (e.g. edit profile)
+            hashMap.put("birthday", ""); //will add later (e.g. edit profile)
+            hashMap.put("username", ""); //will add later (e.g. edit profile)
             hashMap.put("onlineStatus", "online"); //will add later (e.g. edit profile)
             hashMap.put("typingTo", "noOne"); //will add later (e.g. edit profile)
             hashMap.put("phone", ""); //will add later (e.g. edit profile)

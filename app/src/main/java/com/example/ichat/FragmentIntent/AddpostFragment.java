@@ -39,6 +39,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.ichat.DashboardActivity;
 import com.example.ichat.HauNguyen.Login.LoginActivity;
 import com.example.ichat.R;
+import com.example.ichat.fragments.HomeFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -190,7 +191,7 @@ public class AddpostFragment extends Fragment {
                     beginUpdate(description, editPostId);
                 } else {
                     uploadData(description);
-                    getActivity().finish();
+                    
                 }
 
             }
@@ -198,6 +199,12 @@ public class AddpostFragment extends Fragment {
 
         return view;
     }
+
+    public void startFragment() {
+        HomeFragment addpostFragment = new HomeFragment();
+        getFragmentManager().beginTransaction().replace(R.id.content, addpostFragment).commit();
+    }
+
 
     private void handleSendImage(Intent intent) {
         Uri imageURI = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);

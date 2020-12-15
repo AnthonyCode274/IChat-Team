@@ -13,18 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IChat">
-        <activity android:name=".fragments.Fragment_Setting"></activity>
-        <activity
-            android:name=".fragments.Fragment_EditProfile"
-            android:theme="@style/AppTheme">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
         <activity android:name=".GroupEditActivity" />
         <activity android:name=".GroupInfoActivity" />
         <activity android:name=".GroupParticipantAddActivity" />
@@ -36,7 +25,8 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".PostDetailActivity" />
         <activity android:name=".ThereProfileActivity" />
-        <activity android:name=".AddPostActivity">
+        <activity android:name=".AddPostActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
 
                 <!-- For Image -->
@@ -89,9 +79,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider> <!-- Start HauNGuyen -->
-        <activity
-            android:name=".HauNguyen.ContentHome"
-            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".HauNguyen.SignUp.Content_FrameLayout_Register_Activity"
             android:screenOrientation="portrait"
